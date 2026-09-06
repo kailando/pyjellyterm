@@ -81,7 +81,6 @@ print("Logging in...")
 client.auth.login(server, username, password)
 print("Done logging in!")
 
-# Lil thing to test
 j=client.jellyfin
 
 while True:
