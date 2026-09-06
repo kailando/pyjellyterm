@@ -1,5 +1,5 @@
 [project]
-name = "jellyfin-client"
+name = "pyjellyterm"
 version = "0.1.0"
 description = "A Jellyfin terminal client written in Python"
 authors = [
