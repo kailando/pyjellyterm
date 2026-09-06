@@ -138,7 +138,7 @@ dependencies = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "jellyfin-apiclient-python", specifier = ">=1.18.0" }]
+requires-dist = [{ name = "jellyfin-apiclient-python", specifier = "==1.18.0" }]
 
 [[package]]
 name = "requests"
