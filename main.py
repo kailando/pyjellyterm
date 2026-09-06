@@ -23,12 +23,10 @@ if res == CONNECTION_STATE.Unavailable:
     exit(1)
 
 # Print users
-print("Users:")
 u=client.auth.get_public_users()
 up={item['Name']: item['HasPassword'] for item in u}
 users=list(up.keys())
-
-username = get_from_list(users, "Users:", f"Username: (1-{len(users)}) ")
+username=get_from_list(users, "Users:", f"Username: (1-{len(users)}) ")
 
 # Get password if needed
 if up[username]:
