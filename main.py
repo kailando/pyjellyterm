@@ -1,3 +1,4 @@
+from json import dump, load
 from socket import gethostname
 from sys import exit
 
@@ -17,23 +18,67 @@ client.config.app(
 client.config.data["auth.ssl"] = False
 
 # Connect to server
-server = input("Server: ")
-res = client.auth.connect_to_address(server)["State"]
-if res == CONNECTION_STATE.Unavailable:
-    exit(1)
+with open("servers.json", "rt", encoding="utf-8") as f:
+    servers = load(f)
+
+def try_connect(server):
+    res = client.auth.connect_to_address(server)["State"]
+    if res == CONNECTION_STATE.Unavailable:
+        exit(1)
+
+name = get_from_list(list(servers.keys()), "Saved servers (esc to enter custom):")
+if name is None:
+    server = input("Server: ")
+    try_connect(server)
+    if input("Save? (y/n) ").lower()=="y":
+        name = input("Server name: ")
+        servers[name]={"address": server, "users": {}}
+        with open("servers.json", "wt", encoding="utf-8") as f:
+            dump(servers, f, indent=4, separators=(', ', ': '))
+else:
+    server = servers[name]["address"]
+    try_connect(server)
+
 
 # Print users
-u=client.auth.get_public_users()
-up={item['Name']: item['HasPassword'] for item in u}
+used_custom = False
+u=servers[name]["users"]
+up={name: item['has_password'] for name, item in u.items()}
 users=list(up.keys())
-username=get_from_list(users, "Users:")
+username=get_from_list(users, "Saved users (esc to go to full list):")
 
 if username is None:
-    exit(0)
+    used_custom = True
+    client.auth.connect_to_address(server)
+    u=client.auth.get_public_users()
+    up={item['Name']: item['HasPassword'] for item in u}
+    users=list(up.keys())
+    username=get_from_list(users, "Users (esc to exit):")
+
+    if username is None:
+        exit(0)
 
 # Get password if needed
-if up[username]:
-    password=passw("Password: ")
+if used_custom:
+    if input("Has password? (y/n) ").lower()=="y":
+        password=passw("Password: ")
+        hp=True
+    else:
+        hp=False
+elif up[username]:
+    password=servers[name]["users"][username]["password"]
+
+if used_custom and (input("Save? (y/n) ").lower()=="y"):
+    servers[name]["users"][username] = (
+        {
+            "has_password": True,
+            "password": password
+        } if hp else {
+            "has_password": False
+        }
+    )
+    with open("servers.json", "wt", encoding="utf-8") as f:
+        dump(servers, f, indent=4, separators=(', ', ': '))
 
 # Log in
 print("Logging in...")
