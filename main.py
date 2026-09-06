@@ -1,9 +1,10 @@
-from getpass import getpass
 from socket import gethostname
 from sys import exit
 
 from jellyfin_apiclient_python import JellyfinClient
 from jellyfin_apiclient_python.connection_manager import CONNECTION_STATE
+
+from inp import *
 
 # Setup
 client = JellyfinClient()
@@ -27,18 +28,11 @@ u=client.auth.get_public_users()
 up={item['Name']: item['HasPassword'] for item in u}
 users=list(up.keys())
 
-for name in users:
-    print(f" - {name}")
-
-# Get user
-username=input("Username: ")
-while username not in up:
-    print("Invalid user.")
-    username=input("Username: ")
+username = get_from_list(users, "Users:", f"Username: (1-{len(users)}) ")
 
 # Get password if needed
 if up[username]:
-    password=getpass("Password: ")
+    password=passw("Password: ")
 
 # Log in
 print("Logging in...")
