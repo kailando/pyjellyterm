@@ -44,5 +44,7 @@ j=client.jellyfin
 results=j.search_media_items(term=input("Query: "), media="Movies")
 
 for item in results["Items"]:
-    if item["IsFolder"]: print(f"FOLDER: {item['Name']} ({item['Type']})"); continue
+    if item["IsFolder"]:
+        print(f"FOLDER: {item['Name']} ({item['Type']})")
+        continue
     print(f"{item['Name']} ({item.get('ProductionYear', '?')}) {item.get('OfficialRating', '?')}")
