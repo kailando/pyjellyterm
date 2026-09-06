@@ -130,7 +130,7 @@ wheels = [
 ]
 
 [[package]]
-name = "jellyfin-client"
+name = "pyjellyterm"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
