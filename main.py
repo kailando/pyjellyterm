@@ -26,7 +26,10 @@ if res == CONNECTION_STATE.Unavailable:
 u=client.auth.get_public_users()
 up={item['Name']: item['HasPassword'] for item in u}
 users=list(up.keys())
-username=get_from_list(users, "Users:", f"Username: (1-{len(users)}) ")
+username=get_from_list(users, "Users:")
+
+if username is None:
+    exit(0)
 
 # Get password if needed
 if up[username]:
@@ -39,10 +42,19 @@ print("Done logging in!")
 
 # Lil thing to test
 j=client.jellyfin
-results=j.search_media_items(term=input("Query: "), media="Movies")
 
-for item in results["Items"]:
-    if item["IsFolder"]:
-        print(f"FOLDER: {item['Name']} ({item['Type']})")
+while True:
+    try:
+        results=j.search_media_items(term=input("Query: "), media="Movies")
+    except (EOFError, KeyboardInterrupt):
+        break
+
+    if not results["Items"]:
+        print("No results.")
         continue
-    print(f"{item['Name']} ({item.get('ProductionYear', '?')}) {item.get('OfficialRating', '?')}")
+
+    for item in results["Items"]:
+        if item["IsFolder"]:
+            print(f"FOLDER: {item['Name']} ({item['Type']})")
+            continue
+        print(f"{item['Name']} ({item.get('ProductionYear', '?')}) {item.get('OfficialRating', '?')}")

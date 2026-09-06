@@ -50,7 +50,7 @@ else:
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
-def get_from_list(options: list, heading: str, prompt: str) -> Any:
+def get_from_list(options: list, heading: str) -> Any:
     """Get an item from a list by letting the user navigate with arrow keys.
 
     Args:
@@ -63,17 +63,13 @@ def get_from_list(options: list, heading: str, prompt: str) -> Any:
     """
     selected_index = 0
     num_options = len(options)
-
+    c=len(heading.split("\n"))+len(options)
     # Hide terminal cursor if possible to make it look cleaner
     sys.stdout.write("\033[?25l")
     sys.stdout.flush()
 
     try:
         while True:
-            # ANSI escape sequence to clear terminal or overwrite cleanly
-            # We rewrite lines dynamically. To keep it simple, we clear screen slice or use ANSI codes.
-            # Alternate approach: Print menu, then erase previous lines on redraw
-            sys.stdout.write("\033[H\033[J") # Clears terminal cleanly for full redraw
             print(heading)
             
             for i, opt in enumerate(options):
@@ -81,8 +77,6 @@ def get_from_list(options: list, heading: str, prompt: str) -> Any:
                     print(f" > \033[1;36m{opt}\033[0m") # Bold Cyan cursor item
                 else:
                     print(f"   {opt}")
-            
-            print(f"\n{prompt}")
             
             key = get_key()
             if key == "up":
@@ -93,6 +87,10 @@ def get_from_list(options: list, heading: str, prompt: str) -> Any:
                 return options[selected_index]
             elif key == "esc":
                 return None
+            
+            sys.stdout.write(f"\033[{c}A")
+    except (EOFError, KeyboardInterrupt):
+        return None
     finally:
         # Always restore the terminal cursor when exiting
         sys.stdout.write("\033[?25h")
