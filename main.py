@@ -59,12 +59,8 @@ if username is None:
         exit(0)
 
 # Get password if needed
-if used_custom:
-    if input("Has password? (y/n) ").lower()=="y":
-        password=passw("Password: ")
-        hp=True
-    else:
-        hp=False
+if used_custom and up[username]:
+    password=passw("Password: ")
 elif up[username]:
     password=servers[name]["users"][username]["password"]
 
@@ -73,7 +69,7 @@ if used_custom and (input("Save? (y/n) ").lower()=="y"):
         {
             "has_password": True,
             "password": password
-        } if hp else {
+        } if up[username] else {
             "has_password": False
         }
     )
@@ -98,8 +94,12 @@ while True:
         print("No results.")
         continue
 
+    folders=[]
     for item in results["Items"]:
         if item["IsFolder"]:
-            print(f"FOLDER: {item['Name']} ({item['Type']})")
+            folders.append(item)
             continue
         print(f"{item['Name']} ({item.get('ProductionYear', '?')}) {item.get('OfficialRating', '?')}")
+    print("\nFolders: ")
+    for item in folders:
+        print(f"{item['Name']} ({item['Type']})")
