@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+uv add $@
+uv sync
+uv export --format requirements.txt --all-packages -o requirements.txt
