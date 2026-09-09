@@ -1,13 +1,15 @@
-from json import dump, load
 from socket import gethostname
 from sys import exit
 
 from jellyfin_apiclient_python import JellyfinClient
 from jellyfin_apiclient_python.connection_manager import CONNECTION_STATE
 
+from encrypt import JSONFernet
 from inp import *
 
 # Setup
+servers = JSONFernet(passw("Password: "), "servers.bin")
+
 client = JellyfinClient()
 client.config.app(
     "PyJellyTerm",
@@ -18,23 +20,19 @@ client.config.app(
 client.config.data["auth.ssl"] = False
 
 # Connect to server
-with open("servers.json", "rt", encoding="utf-8") as f:
-    servers = load(f)
 
 def try_connect(server):
     res = client.auth.connect_to_address(server)["State"]
     if res == CONNECTION_STATE.Unavailable:
         exit(1)
 
-name = get_from_list(list(servers.keys()), "Saved servers (esc to enter custom):")
+name = get_from_list(list(servers.decrypt().keys()), "Saved servers (esc to enter custom):")
 if name is None:
     server = input("Server: ")
     try_connect(server)
     if input("Save? (y/n) ").lower()=="y":
         name = input("Server name: ")
         servers[name]={"address": server, "users": {}}
-        with open("servers.json", "wt", encoding="utf-8") as f:
-            dump(servers, f, indent=4, separators=(', ', ': '))
 else:
     server = servers[name]["address"]
     try_connect(server)
@@ -73,8 +71,6 @@ if used_custom and (input("Save? (y/n) ").lower()=="y"):
             "has_password": False
         }
     )
-    with open("servers.json", "wt", encoding="utf-8") as f:
-        dump(servers, f, indent=4, separators=(', ', ': '))
 
 # Log in
 print("Logging in...")
@@ -82,10 +78,11 @@ client.auth.login(server, username, password)
 print("Done logging in!")
 
 # Trying to be secure (:
-password=" "*(len(password)+3)
-password=0
-password=None
-del password
+if "password" in globals():
+    password=" "*(len(password)+3)
+    password=0
+    password=None
+    del password
 
 j=client.jellyfin
 
