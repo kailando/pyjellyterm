@@ -8,7 +8,7 @@ from encrypt import JSONFernet
 from inp import *
 
 # Setup
-servers = JSONFernet(passw("Password: "), "servers.bin")
+servers = JSONFernet(passw("Password: "), "servers.txt")
 
 client = JellyfinClient()
 client.config.app(

@@ -10,4 +10,4 @@ wheels/
 .venv
 
 # Config file
-servers.bin
+servers.txt
