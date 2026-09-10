@@ -5,9 +5,9 @@ description = "A Jellyfin terminal client written in Python"
 authors = [
     { name = "kailando", email = "dq11sk@gmail.com" }
 ]
-requires-python = ">=3.14"
+requires-python = "==3.14"
 dependencies = [
-    "cryptography>=50.0.1",
+    "cryptography==50.0.1",
     "jellyfin-apiclient-python==1.18.0",
 ]
 
