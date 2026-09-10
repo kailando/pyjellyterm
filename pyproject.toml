@@ -1,6 +1,6 @@
 [project]
 name = "pyjellyterm"
-version = "0.3.0"
+version = "0.3.1"
 description = "A Jellyfin terminal client written in Python"
 authors = [
     { name = "kailando", email = "dq11sk@gmail.com" }

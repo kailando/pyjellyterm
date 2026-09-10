@@ -11,3 +11,4 @@ wheels/
 
 # Config file
 servers.txt
+servers.txt.tmp
