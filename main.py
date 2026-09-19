@@ -3,6 +3,7 @@ from sys import exit
 
 from jellyfin_apiclient_python import JellyfinClient
 from jellyfin_apiclient_python.connection_manager import CONNECTION_STATE
+from jellyfin_apiclient_python.constants import ItemType
 
 from encrypt import JSONFernet
 from inp import *
@@ -61,7 +62,8 @@ if used_custom and up[username]:
     password=passw("Password: ")
 elif up[username]:
     password=servers[name]["users"][username]["password"]
-
+else:
+    password=""
 if used_custom and (input("Save? (y/n) ").lower()=="y"):
     servers[name]["users"][username] = (
         {
@@ -86,9 +88,25 @@ if "password" in globals():
 
 j=client.jellyfin
 
+medias=j.user_items(
+    params={
+        "recursive": False,
+        "includeItemTypes": [ItemType.COLLECTION_FOLDER],
+    }
+)
+
+media_names={item["Name"]: item["Id"] for item in medias["Items"]}
+
 while True:
     try:
-        results=j.search_media_items(term=input("Query: "), media="Movies")
+        media=get_from_list(list(media_names.keys()), "Collections:")
+        results=j.search_media_items(
+            term=input("Query: "),
+            params={
+                "parentId": media_names[media],
+                "recursive": True
+            }
+        )
     except (EOFError, KeyboardInterrupt):
         break
 
