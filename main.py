@@ -102,10 +102,7 @@ while True:
         media=get_from_list(list(media_names.keys()), "Collections:")
         results=j.search_media_items(
             term=input("Query: "),
-            params={
-                "parentId": media_names[media],
-                "recursive": True
-            }
+            parent_id=media_names[media]
         )
     except (EOFError, KeyboardInterrupt):
         break
