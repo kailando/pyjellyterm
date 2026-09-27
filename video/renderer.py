@@ -1,19 +1,29 @@
 Pixel=tuple[int, int, int]
 Row=list[Pixel]
 Image=list[Row]
-PreprocessedRow=list[tuple[Pixel, Pixel]]
+PreprocessedRow=list[tuple[tuple[Pixel, bool], tuple[Pixel, bool]]]
 PreprocessedImage=list[PreprocessedRow]
 
 def preprocess(image: Image) -> PreprocessedImage:
     preim=[]
+
     for n in range(0, len(image), 2):
+        lastt=None
+        lastb=None
         top = image[n]
         bottom = image[n + 1] if n + 1 < len(image) else [(0, 0, 0)] * len(top)
 
-        preim.append([
-            (top[N], bottom[N])
-            for N in range(len(top))
-        ])
+        preim.append([])
+        for N in range(len(top)):
+            preim[-1].append(
+                (
+                    (top[N], top[N]==lastt),
+                    (bottom[N], bottom[N]==lastb)
+                )
+            )
+            lastt=top[N]
+            lastb=bottom[N]
+
     return preim
 
 def render(image: PreprocessedImage) -> str:
@@ -21,12 +31,19 @@ def render(image: PreprocessedImage) -> str:
     for row in image:
         orow=[]
         for ca, cb in row:
-            orow.append(f"\033[38;2;{ca[0]};{ca[1]};{ca[2]}m") # Top pixel
-            orow.append(f"\033[48;2;{cb[0]};{cb[1]};{cb[2]}m") # Bottom pixel
-            orow.append("▀"                                  ) # The pixel itself
-            orow.append("\033[0m"                            ) # Reset color
-        out.append("".join(orow))
-    return "\n".join(out)
+            cac, cab = ca
+            cbc, cbb = cb
+            
+            if not cab:
+                orow.append(f"\033[38;2;{cac[0]};{cac[1]};{cac[2]}m") # Top pixel
+            if not cbb:
+                orow.append(f"\033[48;2;{cbc[0]};{cbc[1]};{cbc[2]}m") # Bottom pixel
+                
+            orow.append("▀")
+        out.append("".join(orow))                                     # The pixel itself
+        
+    return "\033[0m\n".join(out) + "\033[0m"                          # Reset
+
 
 if __name__=="__main__":
     scale=4
