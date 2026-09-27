@@ -1,0 +1,1 @@
+Uses ▀ (U+9600), ANSI foreground color, and ANSI background color
