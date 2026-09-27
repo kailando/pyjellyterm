@@ -100,9 +100,12 @@ media_names={item["Name"]: item["Id"] for item in medias["Items"]}
 while True:
     try:
         media=get_from_list(list(media_names.keys()), "Collections:")
-        results=j.search_media_items(
-            term=input("Query: "),
-            parent_id=media_names[media]
+        results=j.get_user_items(
+            params={
+                "searchTerm": input("Query: "),
+                "parentId": media_names[media],
+                "recursive": "false"
+            }
         )
     except (EOFError, KeyboardInterrupt):
         break
