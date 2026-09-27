@@ -4,5 +4,5 @@ cryptography==50.0.1
     # via pyjellyterm (pyproject.toml)
 jellyfin-apiclient-python==1.19.0
     # via pyjellyterm (pyproject.toml)
-pyright==1.1.414
+pylint==4.0.9
     # via pyjellyterm (pyproject.toml)
