@@ -29,24 +29,31 @@ def render(image: PreprocessedImage) -> str:
     return "\n".join(out)
 
 if __name__=="__main__":
-    L,M,H,=0,128,255
-    image=[
-        [
-            (
-                L,
-                L,
-                L,
-            ),
-            (
-                M if n&4 else L,
-                M if n&2 else L,
-                M if n&1 else L,
-            ),
-            (
-                H if n&4 else L,
-                H if n&2 else L,
-                H if n&1 else L,
-            ),
-        ] for n in range(0, 8)
-    ]
-    print(render(preprocess(image)))
+    scale=4
+
+    sep=[(0,0,0)]*round(256/scale)
+    image=[]
+
+    for r in range(0,256,scale):
+        image.append([])
+        for b in range(0,256,scale):
+            image[-1].append((r,0,b))
+            
+    image.append(sep)
+    image.append(sep)
+
+    for r in range(0,256,scale):
+        image.append([])
+        for g in range(0,256,scale):
+            image[-1].append((r,g,0))
+
+    image.append(sep)
+    image.append(sep)
+
+    for b in range(0,256,scale):
+        image.append([])
+        for g in range(0,256,scale):
+            image[-1].append((0,g,b))
+            
+    print(render(preprocess(image)),flush=False)
+    print("",flush=True)
