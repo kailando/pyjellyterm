@@ -169,7 +169,7 @@ wheels = [
 
 [[package]]
 name = "jellyfin-apiclient-python"
-version = "1.18.0"
+version = "1.19.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi" },
@@ -177,9 +177,18 @@ dependencies = [
     { name = "urllib3" },
     { name = "websocket-client" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c7/60/11c0fa95d235146e33317294bb0c8df90e3f2ee8bfbf20437767aae5ee8e/jellyfin_apiclient_python-1.18.0.tar.gz", hash = "sha256:8a3d77111f748e3c5396f7651bd9a26c1bc7d7342cc57899ac59c14cf8bcbbab", size = 85493, upload-time = "2026-07-31T00:28:24.966Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/07/4b/0427d37581420bb01e1010d30968a8bdb346c5f532e5db33735fbeda214a/jellyfin_apiclient_python-1.19.0.tar.gz", hash = "sha256:596c8f003f55cd4638b3d2ef00d10cb576e1868ccb9fd150ae64d6d82a056647", size = 88271, upload-time = "2026-09-26T18:28:03.581Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/73/99/bc0555653d8598d14e25661a308cb1817a94d60efde02acc7216b79a62f6/jellyfin_apiclient_python-1.18.0-py3-none-any.whl", hash = "sha256:f459c0c785eb08e40f90fd51f09312f58f8d7807dbf64688467640f5cca3d326", size = 69120, upload-time = "2026-07-31T00:28:23.838Z" },
+    { url = "https://files.pythonhosted.org/packages/f2/69/67ea989143f82b0807452ca2d107d4e0c00f7491f0d86ccb9291b55d7f15/jellyfin_apiclient_python-1.19.0-py3-none-any.whl", hash = "sha256:3598904aa6456aafc8aa70dbcd6286e485927ac44f8923e6b68e3c5c84d905c4", size = 70620, upload-time = "2026-09-26T18:28:02.449Z" },
+]
+
+[[package]]
+name = "nodeenv"
+version = "1.11.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/9a/8e/105de02c1322cfada6d9710d9146ef8026419d433c9d08359a2d35805811/nodeenv-1.11.0.tar.gz", hash = "sha256:3ce8fe5b71d16e8af7039ca65257354100bc772965d6bc549070649e53b1b146", size = 99301, upload-time = "2026-09-26T11:29:21.367Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/54/c8/12811c9b48fde162bb72b6f2e78fada9a247a09d7bb5be2050a5d099c77b/nodeenv-1.11.0-py2.py3-none-any.whl", hash = "sha256:edaa16e6c14d7cf395d75d4bbd5a26390f4dc06501a33b4e76282b02cc688a25", size = 34277, upload-time = "2026-09-26T11:29:19.933Z" },
 ]
 
 [[package]]
@@ -198,12 +207,27 @@ source = { virtual = "." }
 dependencies = [
     { name = "cryptography" },
     { name = "jellyfin-apiclient-python" },
+    { name = "pyright" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "cryptography", specifier = "==50.0.1" },
-    { name = "jellyfin-apiclient-python", specifier = "==1.18.0" },
+    { name = "jellyfin-apiclient-python", specifier = "==1.19.0" },
+    { name = "pyright", specifier = "==1.1.414" },
+]
+
+[[package]]
+name = "pyright"
+version = "1.1.414"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "nodeenv" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e1/1b/244c7b710031ada80f27e579ec20d28a2285dfc318fed0339866b1047f12/pyright-1.1.414.tar.gz", hash = "sha256:523c0a97c60da6333234955c277730c9cf4f5bd6d5399e7b7d2b0fc5d3599524", size = 4154638, upload-time = "2026-09-10T12:26:53.181Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d7/ba/18b6e682ead424ad24bcc134339ae5d1b931cd9ae260540592a058a91279/pyright-1.1.414-py3-none-any.whl", hash = "sha256:2a6b4b3298c9eec174c5ed83bd338de6eee82df2992f3e1930e6199d381be36f", size = 6225049, upload-time = "2026-09-10T12:26:51.427Z" },
 ]
 
 [[package]]
@@ -219,6 +243,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ac/c3/e2a2b89f2d3e2179abd6d00ebd70bff6273f37fb3e0cc209f48b39d00cbf/requests-2.34.2.tar.gz", hash = "sha256:f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed", size = 142856, upload-time = "2026-05-14T19:25:27.735Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl", hash = "sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0", size = 73075, upload-time = "2026-05-14T19:25:26.443Z" },
+]
+
+[[package]]
+name = "typing-extensions"
+version = "4.16.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f6/cc/6253133b5bb138fc3306cebfbda2c520f545d36b5be2c7255cc528bb45d6/typing_extensions-4.16.0.tar.gz", hash = "sha256:dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5", size = 113555, upload-time = "2026-07-02T08:40:05.92Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl", hash = "sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8", size = 45571, upload-time = "2026-07-02T08:40:04.659Z" },
 ]
 
 [[package]]
