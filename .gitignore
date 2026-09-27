@@ -12,3 +12,6 @@ wheels/
 # Config file
 servers.txt
 servers.txt.tmp
+
+# VSCode
+.vscode
