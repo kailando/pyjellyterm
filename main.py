@@ -1,12 +1,13 @@
+"""The main script of PyJellyTerm."""
 from socket import gethostname
-from sys import exit
+from sys import exit # pylint: disable=redefined-builtin
 
 from jellyfin_apiclient_python import JellyfinClient
 from jellyfin_apiclient_python.connection_manager import CONNECTION_STATE
 from jellyfin_apiclient_python.constants import ItemType
 
 from encrypt import JSONFernet
-from inp import *
+from inp import get_from_list, passw
 
 # Setup
 servers = JSONFernet(passw("Password: "), "servers.txt")
@@ -22,8 +23,13 @@ client.config.data["auth.ssl"] = False
 
 # Connect to server
 
-def try_connect(server):
-    res = client.auth.connect_to_address(server)["State"]
+def try_connect(server_addr: str):
+    """Try to connect to a server. Exits program with code 1 if failed.
+
+    Args:
+        server_addr (str): The server address to connect to.
+    """
+    res = client.auth.connect_to_address(server_addr)["State"]
     if res == CONNECTION_STATE.Unavailable:
         exit(1)
 
@@ -119,7 +125,10 @@ while True:
         if item["IsFolder"]:
             folders.append(item)
             continue
-        print(f"{item['Name']} ({item.get('ProductionYear', '?')}) {item.get('OfficialRating', '?')}")
+        name=item["Name"]
+        year=item.get('ProductionYear', '?')
+        rating=item.get('OfficialRating', '?')
+        print(f"{name} ({year}) {rating}")
     print("\nFolders: ")
     for item in folders:
         print(f"{item['Name']} ({item['Type']})")

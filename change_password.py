@@ -1,6 +1,8 @@
+"""Change the password to your client."""
+
+from os import rename
 from encrypt import JSONFernet
 from inp import passw
-from os import rename
 
 op=passw("Old password: ")
 fernet=JSONFernet(op, "servers.txt")

@@ -1,3 +1,4 @@
+"""An encryptor/decryptor for JSON."""
 from base64 import urlsafe_b64encode as ub64
 from collections import UserDict
 from hashlib import sha256
@@ -8,12 +9,12 @@ from cryptography.fernet import Fernet
 
 
 class EncryptedView(UserDict):
-    """A proxy dictionary that forwards all structural changes back to the root JSONFernet object."""
-    def __init__(self, root, path, initial_data):
+    """A proxy dict that forwards all structural changes back to the root JSONFernet object."""
+    def __init__(self, root, path, initial_data): # pylint: disable=super-init-not-called
         # Assign attributes first before filling data to prevent initialization crash
         self._root = root
         self._path = path
-        self.data = initial_data  # Fill internal storage directly to skip triggering __setitem__ loops
+        self.data = initial_data  # Fill internal storage directly to not trigger __setitem__ loops
 
     def __getitem__(self, key):
         value = super().__getitem__(key)
@@ -36,7 +37,7 @@ class EncryptedView(UserDict):
         target = data
         for step in self._path[:-1]:
             target = target[step]
-        
+
         # Update the root tree with our local modifications and write to disk
         if self._path:
             target[self._path[-1]] = dict(self.data)
@@ -46,6 +47,7 @@ class EncryptedView(UserDict):
 
 
 class JSONFernet:
+    """A version of cryptography.fernet.Fernet tailored for JSON."""
     def __init__(self, key: str, fp: str):
         self.fernet = None
         self.fp = None
@@ -56,23 +58,39 @@ class JSONFernet:
                 ).digest()
             ), fp
         )
-    
+
     def init(self, key: bytes, fp: str):
+        """(Re)initialize the class with a file path and a password.
+
+        Args:
+            key (bytes): The password. Reccomended to pass through sha256().digest()
+            fp (str): The file path to read/write from/to.
+        """
         self.fernet = Fernet(key)
         self.fp = fp
 
         if not exists(fp):
             self.encrypt({})
-    
+
     def decrypt(self) -> dict:
+        """Decrypt the file into a dictionary.
+
+        Returns:
+            dict: The resulting dictionary.
+        """
         with open(self.fp, "rb") as f:
             return loads(
                 self.fernet.decrypt(
                     f.read()
                 ).decode("utf-8")
             )
-    
+
     def encrypt(self, json_data: dict):
+        """Encrypt JSON data into the file.
+
+        Args:
+            json_data (dict): The JSON data to encrypt.
+        """
         with open(self.fp, "wb") as f:
             f.write(
                 self.fernet.encrypt(
@@ -98,16 +116,20 @@ class JSONFernet:
         return key in self.decrypt()
 
     def get(self, key: str, default=None):
+        """Look at dict.get()"""
         return self._get_root_view().get(key, default)
 
     def items(self):
+        """Look at dict.items()"""
         return self._get_root_view().items()
 
     def keys(self):
+        """Look at dict.keys()"""
         return self._get_root_view().keys()
 
     def values(self):
+        """Look at dict.values()"""
         return self._get_root_view().values()
-        
+
     def __iter__(self):
         return iter(self._get_root_view())
